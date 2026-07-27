@@ -1,0 +1,162 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>软件商城 - 优质数字软件</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+</head>
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <a href="#" class="logo" onclick="showPage('home')">
+        <span class="logo-icon">⚡</span>
+        <span class="logo-text">软件商城</span>
+      </a>
+      <nav class="nav">
+        <a href="#" class="nav-link active" data-page="home" onclick="showPage('home')">首页</a>
+        <a href="#" class="nav-link" data-page="products" onclick="showPage('products')">全部软件</a>
+        <a href="#" class="nav-link" data-page="about" onclick="showPage('about')">关于我们</a>
+      </nav>
+      <div class="header-actions">
+        <button class="cart-btn" onclick="toggleCart()">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero" id="heroSection">
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="hero-title">优质<span class="gradient-text">数字软件</span>，一站购齐</h1>
+        <p class="hero-desc">精选高质量软件工具，即买即用，安全放心。专业售后支持，让您无后顾之忧。</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary btn-lg" onclick="showPage('products')">浏览软件</button>
+          <button class="btn btn-outline btn-lg" onclick="showPage('about')">了解更多</button>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><span class="stat-num">500+</span><span class="stat-label">满意客户</span></div>
+          <div class="stat"><span class="stat-num">50+</span><span class="stat-label">软件产品</span></div>
+          <div class="stat"><span class="stat-num">99%</span><span class="stat-label">好评率</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="main">
+    <div class="container">
+      <section class="page-section" id="homePage">
+        <h2 class="section-title">🔥 热门软件</h2>
+        <div class="product-grid" id="hotProducts"></div>
+      </section>
+      <section class="page-section" id="productsPage" style="display:none">
+        <div class="products-header">
+          <h2 class="section-title">全部软件</h2>
+          <div class="filter-bar">
+            <button class="filter-btn active" data-cat="all" onclick="filterProducts('all')">全部</button>
+            <button class="filter-btn" data-cat="tool" onclick="filterProducts('tool')">工具</button>
+            <button class="filter-btn" data-cat="game" onclick="filterProducts('game')">游戏</button>
+            <button class="filter-btn" data-cat="dev" onclick="filterProducts('dev')">开发</button>
+            <button class="filter-btn" data-cat="media" onclick="filterProducts('media')">媒体</button>
+          </div>
+        </div>
+        <div class="product-grid" id="allProducts"></div>
+      </section>
+      <section class="page-section" id="aboutPage" style="display:none">
+        <div class="about-card">
+          <h2 class="section-title">关于我们</h2>
+          <p class="about-text">我们是一家专注于数字软件销售的平台，致力于为用户提供高质量、安全可靠的软件产品。</p>
+          <div class="features-grid">
+            <div class="feature-item"><div class="feature-icon">🔒</div><h3>安全可靠</h3><p>所有软件经过严格检测，确保安全无忧</p></div>
+            <div class="feature-item"><div class="feature-icon">⚡</div><h3>即买即用</h3><p>购买后立即下载，无需等待</p></div>
+            <div class="feature-item"><div class="feature-icon">💬</div><h3>专业售后</h3><p>提供技术支持，解决使用问题</p></div>
+            <div class="feature-item"><div class="feature-icon">🔄</div><h3>持续更新</h3><p>软件持续更新，享受最新版本</p></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div class="modal-overlay" id="productModal" onclick="closeModal(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeProductModal()">&times;</button>
+      <div class="modal-body">
+        <div class="modal-image" id="modalImage"></div>
+        <div class="modal-info">
+          <span class="modal-cat" id="modalCat"></span>
+          <h2 id="modalTitle"></h2>
+          <p class="modal-desc" id="modalDesc"></p>
+          <div class="modal-features" id="modalFeatures"></div>
+          <div class="modal-price-row">
+            <span class="modal-price" id="modalPrice"></span>
+            <span class="modal-original" id="modalOriginal"></span>
+          </div>
+          <button class="btn btn-primary btn-lg btn-full" id="modalCartBtn">加入购物车</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+  <aside class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h3>🛒 购物车</h3>
+      <button class="cart-close" onclick="toggleCart()">&times;</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <div class="cart-empty" id="cartEmpty"><p>🛒</p><p>购物车是空的</p></div>
+    </div>
+    <div class="cart-footer" id="cartFooter" style="display:none">
+      <div class="cart-total"><span>合计</span><span class="total-price" id="cartTotal">¥0</span></div>
+      <button class="btn btn-primary btn-lg btn-full" onclick="showCheckout()">去结算</button>
+    </div>
+  </aside>
+
+  <div class="checkout-overlay" id="checkoutOverlay">
+    <div class="checkout-page">
+      <button class="checkout-back" onclick="hideCheckout()">← 返回</button>
+      <h2 class="checkout-title">确认订单</h2>
+      <div class="checkout-grid">
+        <div class="checkout-items"><h3>订单明细</h3><div id="checkoutItems"></div></div>
+        <div class="checkout-summary">
+          <h3>支付信息</h3>
+          <div class="form-group"><label>联系方式</label><input type="text" id="contactInput" placeholder="QQ / 微信 / 邮箱" class="form-input" /></div>
+          <div class="form-group"><label>备注（选填）</label><textarea id="remarkInput" placeholder="有什么要说的..." class="form-input form-textarea"></textarea></div>
+          <div class="checkout-total-row"><span>商品总额</span><span id="checkoutSubtotal">¥0</span></div>
+          <div class="checkout-total-row total-final"><span>应付金额</span><span id="checkoutFinal">¥0</span></div>
+          <button class="btn btn-primary btn-lg btn-full" onclick="submitOrder()">提交订单</button>
+          <p class="checkout-hint">提交后我们将通过您留下的联系方式与您联系</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="success-overlay" id="successOverlay">
+    <div class="success-card">
+      <div class="success-icon">✅</div>
+      <h2>订单提交成功！</h2>
+      <p>我们将尽快通过您留下的联系方式与您联系，请保持畅通。</p>
+      <button class="btn btn-primary" onclick="closeSuccess()">好的</button>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <p>&copy; 2025 软件商城 - 优质数字软件平台</p>
+        <p class="footer-links">
+          <a href="#" onclick="showPage('about')">关于我们</a><span>|</span><a href="#" onclick="showPage('products')">全部软件</a>
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

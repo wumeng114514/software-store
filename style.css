@@ -181,8 +181,8 @@ body {
   margin-bottom: 18px;
 }
 .qr-img {
-  width: 240px;
-  max-width: 80%;
+  width: 170px;
+  max-width: 60%;
   height: auto;
   border-radius: 12px;
   display: block;

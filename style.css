@@ -1,20 +1,19 @@
 ﻿* { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-  --bg: #0a0a0f;
-  --card: #16162a;
-  --border: #2a2a4a;
-  --text: #e8e8f0;
-  --text2: #9090b0;
+  --text: #f0f0f8;
+  --text2: #b8b8d0;
   --primary: #6c5ce7;
   --primary2: #a855f7;
   --accent: #00d2ff;
   --success: #10b981;
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.15);
 }
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
-  background: var(--bg);
+  background: #0a0a12;
   color: var(--text);
   min-height: 100vh;
   line-height: 1.6;
@@ -22,16 +21,44 @@ body {
   overflow-x: hidden;
 }
 
+/* 彩色光斑背景 - 毛玻璃的模糊来源 */
 .bg-glow {
   position: fixed;
-  top: -20%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 800px;
-  height: 800px;
-  background: radial-gradient(circle, rgba(108,92,231,0.25) 0%, rgba(0,210,255,0.08) 40%, transparent 70%);
-  pointer-events: none;
+  inset: 0;
   z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.bg-glow::before,
+.bg-glow::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+}
+.bg-glow::before {
+  top: -10%;
+  left: -5%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(108,92,231,0.55), transparent 70%);
+  animation: drift1 14s ease-in-out infinite;
+}
+.bg-glow::after {
+  bottom: -15%;
+  right: -10%;
+  width: 550px;
+  height: 550px;
+  background: radial-gradient(circle, rgba(0,210,255,0.4), transparent 70%);
+  animation: drift2 16s ease-in-out infinite;
+}
+@keyframes drift1 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(80px, 60px); }
+}
+@keyframes drift2 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-70px, -50px); }
 }
 
 .wrap {
@@ -57,7 +84,7 @@ body {
 .title {
   font-size: 2rem;
   font-weight: 800;
-  background: linear-gradient(135deg, var(--primary), var(--accent));
+  background: linear-gradient(135deg, #b8a7ff, var(--accent));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -65,14 +92,16 @@ body {
 }
 .subtitle { color: var(--text2); font-size: 0.95rem; }
 
-/* Card */
+/* 毛玻璃卡片 */
 .card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
   padding: 28px 24px;
   margin-bottom: 20px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.12);
 }
 .card-title {
   display: flex;
@@ -91,7 +120,7 @@ body {
 }
 .card-hint { color: var(--text2); font-size: 0.85rem; margin-bottom: 18px; }
 
-/* Email list */
+/* Email list - 毛玻璃小卡 */
 .email-list { list-style: none; }
 .email-item {
   display: flex;
@@ -99,14 +128,20 @@ body {
   justify-content: space-between;
   gap: 12px;
   padding: 14px 16px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid var(--border);
-  border-radius: 12px;
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
   margin-bottom: 12px;
-  transition: all 0.2s;
+  transition: all 0.25s;
 }
 .email-item:last-child { margin-bottom: 0; }
-.email-item:hover { border-color: var(--primary); background: rgba(108,92,231,0.08); }
+.email-item:hover {
+  border-color: rgba(168,133,255,0.6);
+  background: rgba(108,92,231,0.15);
+  transform: translateY(-2px);
+}
 .email-text {
   font-size: 1rem;
   font-weight: 500;
@@ -117,28 +152,32 @@ body {
 .copy-btn {
   flex-shrink: 0;
   padding: 8px 18px;
-  border: none;
-  border-radius: 8px;
-  background: linear-gradient(135deg, var(--primary), var(--primary2));
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 10px;
+  background: rgba(108,92,231,0.5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   color: #fff;
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
 }
-.copy-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(108,92,231,0.5); }
+.copy-btn:hover { background: rgba(108,92,231,0.8); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(108,92,231,0.5); }
 .copy-btn:active { transform: translateY(0); }
-.copy-btn.copied { background: var(--success); }
+.copy-btn.copied { background: rgba(16,185,129,0.85); }
 
-/* QR box */
+/* QR box - 毛玻璃 */
 .qr-box {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 24px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid var(--border);
-  border-radius: 14px;
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
   margin-bottom: 18px;
 }
 .qr-img {
@@ -160,7 +199,7 @@ body {
   font-family: "Consolas", "Monaco", monospace;
 }
 
-/* Join button */
+/* Join button - 毛玻璃 */
 .join-btn {
   display: flex;
   align-items: center;
@@ -168,15 +207,18 @@ body {
   gap: 8px;
   width: 100%;
   padding: 15px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #12b7f5, #0088cc);
+  border-radius: 14px;
+  background: rgba(18,183,245,0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.2);
   color: #fff;
   font-size: 1rem;
   font-weight: 700;
   text-decoration: none;
-  transition: all 0.2s;
+  transition: all 0.25s;
 }
-.join-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(18,183,245,0.5); }
+.join-btn:hover { background: rgba(18,183,245,0.85); transform: translateY(-2px); box-shadow: 0 6px 24px rgba(18,183,245,0.5); }
 .join-btn:active { transform: translateY(0); }
 .qq-icon { font-size: 1.2rem; }
 
@@ -188,13 +230,16 @@ body {
   margin-top: 32px;
 }
 
-/* Toast */
+/* Toast - 毛玻璃 */
 .toast {
   position: fixed;
   bottom: -80px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--success);
+  background: rgba(16,185,129,0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.25);
   color: #fff;
   padding: 12px 28px;
   border-radius: 30px;
